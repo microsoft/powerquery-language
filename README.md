@@ -1,5 +1,8 @@
+# Overview
 
-# Contributing
+This repository stores the .tmLanguage file for the Power Query / M language.
+
+## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
