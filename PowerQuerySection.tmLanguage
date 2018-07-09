@@ -8,6 +8,8 @@
 		<string>PQ</string>
 		<string>m</string>
 		<string>M</string>
+        <string>pqm</string>
+        <string>PQM</string>
 	</array>
 
 	<key>name</key>
