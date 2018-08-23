@@ -1,22 +1,23 @@
-fileTypes:
-    - pq
-    - pqm
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
 name: powerquery
 scopeName: source.powerquery
+fileTypes: [pq,pqm]
 uuid: 41968B57-12E6-4AC5-92A4-A837010E8B0A
+
 patterns:
-  - include: '#Noise'
-  - include: '#LiteralExpression'
-  - include: '#Keywords'
-  - include: '#ImplicitVariable'
-  - include: '#IntrinsicVariable'
-  - include: '#Operators'
-  - include: '#DotOperators'
-  - include: '#TypeName'
-  - include: '#RecordExpression'
-  - include: '#Punctuation'
-  - include: '#QuotedIdentifier'
-  - include: '#Identifier'
+- include: '#Noise'
+- include: '#LiteralExpression'
+- include: '#Keywords'
+- include: '#ImplicitVariable'
+- include: '#IntrinsicVariable'
+- include: '#Operators'
+- include: '#DotOperators'
+- include: '#TypeName'
+- include: '#RecordExpression'
+- include: '#Punctuation'
+- include: '#QuotedIdentifier'
+- include: '#Identifier'
 
 repository:
   Keywords:
@@ -94,12 +95,12 @@ repository:
   EscapeSequence:
     begin: '#\('
     beginCaptures:
-        '0':
-            name: punctuation.definition.escapesequence.begin.powerquery
+      '0':
+        name: punctuation.definition.escapesequence.begin.powerquery
     end: \)
     endCaptures:
       '0':
-          name: punctuation.definition.escapesequence.end.powerquery
+        name: punctuation.definition.escapesequence.end.powerquery
     patterns:
       - match: '(#|\h{4}|\h{8}|cr|lf|tab)(?:,(#|\h{4}|\h{8}|cr|lf|tab))*'
       - match: '[^\)]'
@@ -136,7 +137,7 @@ repository:
       '0':
         name: inclusiveidentifier.powerquery
   Identifier:
-    match: "(?x:\r\n                # look-behind; identifier must not follow an identifier-part-char or a dot\r\n                (?<![\\._\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}])\r\n                # Optional @ symbol\r\n                (@?)\r\n\r\n                # start of captured group\r\n                (\r\n                    # identifier-start-character\r\n                    [_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}]\r\n                    # 0-or-more identifier-part-characters\r\n                    [_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}]*\r\n                    \r\n                    # optionally followed by zero-or-more of this group\r\n                    (?:\r\n                        # dot\r\n                        \\.\r\n                        # identifier-start-character\r\n                        [_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}]\r\n                        # 0-or-more identifier-part-characters\r\n                        [_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}]*\r\n                    )*\r\n                # end of captured group, and word boundary\r\n                ) \\b\r\n            )"
+    match: "(?x:(?<![\\._\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}])(@?)([_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}][_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}]*(?:\\.[_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}][_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}])*)\\b)"
     captures:
       '1':
         name: keyword.operator.inclusiveidentifier.powerquery

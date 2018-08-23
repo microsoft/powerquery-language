@@ -2,15 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
+    <key>name</key>
+    <string>powerquery</string>
+    <key>scopeName</key>
+    <string>source.powerquery</string>
     <key>fileTypes</key>
     <array>
       <string>pq</string>
       <string>pqm</string>
     </array>
-    <key>name</key>
-    <string>powerquery</string>
-    <key>scopeName</key>
-    <string>source.powerquery</string>
     <key>uuid</key>
     <string>41968B57-12E6-4AC5-92A4-A837010E8B0A</string>
     <key>patterns</key>
@@ -385,31 +385,7 @@
       <key>Identifier</key>
       <dict>
         <key>match</key>
-        <string>(?x:&#xD;
-                # look-behind; identifier must not follow an identifier-part-char or a dot&#xD;
-                (?&lt;![\._\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}])&#xD;
-                # Optional @ symbol&#xD;
-                (@?)&#xD;
-&#xD;
-                # start of captured group&#xD;
-                (&#xD;
-                    # identifier-start-character&#xD;
-                    [_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}]&#xD;
-                    # 0-or-more identifier-part-characters&#xD;
-                    [_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}]*&#xD;
-                    &#xD;
-                    # optionally followed by zero-or-more of this group&#xD;
-                    (?:&#xD;
-                        # dot&#xD;
-                        \.&#xD;
-                        # identifier-start-character&#xD;
-                        [_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}]&#xD;
-                        # 0-or-more identifier-part-characters&#xD;
-                        [_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}]*&#xD;
-                    )*&#xD;
-                # end of captured group, and word boundary&#xD;
-                ) \b&#xD;
-            )</string>
+        <string>(?x:(?&lt;![\._\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}])(@?)([_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}][_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}]*(?:\.[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}][_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}])*)\b)</string>
         <key>captures</key>
         <dict>
           <key>1</key>
