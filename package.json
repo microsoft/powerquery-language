@@ -1,0 +1,27 @@
+{
+  "name": "powerquery-language",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TextMate grammar files for Power Query / M language",
+  "main": "build/build.js",
+  "scripts": {
+    "build": "npm run build:grammar && npm run build:tests",
+    "build:grammar": "tsc -b build -v && node build/build.js",
+    "build:tests": "tsc -b tests -v",
+    "test": "mocha --full-trace tests/test.js  --reporter mocha-multi-reporters"
+  },
+  "dependencies": {
+    "@types/js-yaml": "latest",
+    "@types/mocha": "latest",
+    "@types/node": "latest",
+    "@types/plist": "^3.0.1",
+    "js-yaml": "latest",
+    "mocha": "latest",
+    "plist": "latest",
+    "typescript": "latest",
+    "vscode-textmate": "^3"
+  },
+  "devDependencies": {
+    "mocha-multi-reporters": "^1.1.7"
+  }
+}
