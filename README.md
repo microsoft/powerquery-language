@@ -2,6 +2,22 @@
 
 This repository stores the .tmLanguage file for the Power Query / M language.
 
+## Usage
+
+The Power Query TextMate grammar file ([PowerQuery.tmLanguage](https://raw.githubusercontent.com/Microsoft/powerquery-language/master/PowerQuery.tmLanguage)) can be consumed directly.
+
+### Update and test
+
+Edit the PowerQuery.YAML-tmLanguage file. Running the build process will generate the PowerQuery.tmLanguage file.
+
+Run the following to build and test:
+
+```
+npm install
+npm run-script build
+npm test
+```
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
