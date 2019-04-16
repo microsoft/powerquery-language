@@ -24,9 +24,9 @@ in
         let lines = code.split("\n");
 
         for (let i = 0; i < lines.length; i++) {
-            let r = grammar.tokenizeLine(lines[i], state);
-            expect(r.tokens.length).greaterThan(0);
+            let r = grammar.tokenizeLine(lines[i], state);            
             state = r.ruleStack;
+            expect(r.tokens.length).to.be.greaterThan(0);
         }
     });
 });

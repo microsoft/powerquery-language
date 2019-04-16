@@ -3,4 +3,3 @@ node_modules/
 *.js
 *.js.map
 xunit.xml
-package-lock.json

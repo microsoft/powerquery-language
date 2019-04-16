@@ -11,17 +11,16 @@
     "test": "mocha --full-trace tests/test.js  --reporter mocha-multi-reporters"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
+    "@types/chai": "latest",
     "@types/js-yaml": "latest",
     "@types/mocha": "latest",
-    "@types/node": "latest",
-    "@types/plist": "^3.0.1",
-    "chai": "^4.2.0",
+    "@types/plist": "latest",
+    "chai": "latest",
     "js-yaml": "latest",
     "mocha": "latest",
-    "mocha-multi-reporters": "^1.1.7",
+    "mocha-multi-reporters": "latest",
     "plist": "latest",
     "typescript": "latest",
-    "vscode-textmate": "^3"
+    "vscode-textmate": "latest"
   }
 }
