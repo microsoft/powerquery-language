@@ -21,6 +21,6 @@
     "mocha-multi-reporters": "latest",
     "plist": "latest",
     "typescript": "latest",
-    "vscode-textmate": "latest"
+    "vscode-textmate": "^3.3.3"
   }
 }

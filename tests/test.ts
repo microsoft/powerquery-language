@@ -1,4 +1,3 @@
-import fs = require('fs');
 import path = require('path');
 import vsctm = require('vscode-textmate');
 import { expect } from "chai";
@@ -11,7 +10,11 @@ function getGrammarFilePath(): string {
 const registry = new vsctm.Registry();
 const grammar = registry.loadGrammarFromPathSync(getGrammarFilePath());
 
-describe("Test if this works", () => {
+describe("Basic grammar tests", () => {
+    it("Grammar loaded", () => {
+        expect(grammar).is.not.null.and.is.not.undefined;
+    }),
+
     it("Tokens", () => {
         const code = `let
     a = 1,
