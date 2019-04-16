@@ -19,22 +19,24 @@ const QuotedIdentifierBeginScope = "punctuation.definition.quotedidentifier.begi
 const QuotedIdentifierEndScope = "punctuation.definition.quotedidentifier.end.powerquery";
 const IdentifierScope = "entity.name.powerquery";
 
-class SingleLineTokenComparer {
-    public grammarTokens: vsctm.IToken[];
-    public parserTokens: readonly Token[];
+// Query constants
+const QueryMultiline = `let
+    a = 1,
+    b = "text",
+    c = Text.From(a)
+in
+    c`;
 
-    constructor(query: string, normalize: boolean = true) {
-        let pqlex: Lexer.TLexer = Lexer.from(query);
-        pqlex = Lexer.remaining(pqlex);
-        this.parserTokens = pqlex.tokens;
+class TokenComparer {
+    public readonly grammarTokens: vsctm.IToken[];
+    public readonly parserTokens: readonly Token[];
 
-        // remove whitespace tokens from grammar result
-        let r = grammar.tokenizeLine(query, null);
+    constructor(grammarTokens: vsctm.IToken[], parserTokens: readonly Token[]) {
+        this.grammarTokens = grammarTokens;
+        this.parserTokens = parserTokens;
 
-        this.grammarTokens = normalize ? SingleLineTokenComparer.NormalizeGrammarTokens(r.tokens) : r.tokens;
-
-        expect(this.parserTokens.length).greaterThan(0);
-        expect(this.grammarTokens.length).greaterThan(0);
+        expect(this.parserTokens.length).greaterThan(0, "parserTokens should have at least one token");
+        expect(this.grammarTokens.length).greaterThan(0, "grammarTokens should have at least one token");
     }
 
     public assertTokenCount() {
@@ -102,21 +104,27 @@ class SingleLineTokenComparer {
     }
 }
 
+class SingleLineTokenComparer extends TokenComparer {
+    constructor(query: string, normalize: boolean = true) {
+        let pqlex: Lexer.TLexer = Lexer.from(query);
+        pqlex = Lexer.remaining(pqlex);
+
+        // remove whitespace tokens from grammar result
+        let r = grammar.tokenizeLine(query, null);
+        let grammarTokens = normalize ? TokenComparer.NormalizeGrammarTokens(r.tokens): r.tokens;
+
+        super(grammarTokens, pqlex.tokens);
+    }
+}
+
 describe("Basic grammar tests", () => {
     it("Grammar loaded", () => {
         expect(grammar).to.exist;
     }),
 
         it("Tokens", () => {
-            const code = `let
-    a = 1,
-    b = "text",
-    c = Text.From(a)
-in
-    c`;
-
             let state = null;
-            let lines = code.split("\n");
+            let lines = QueryMultiline.split("\n");
 
             for (let i = 0; i < lines.length; i++) {
                 let r = grammar.tokenizeLine(lines[i], state);
@@ -171,4 +179,36 @@ describe("Compare parser tokens", () => {
             r.assertTokenCount();
             r.assertTokenOffsets();
         })
+});
+
+describe("Incremental parsing", () => {
+    it("Simple", () => {
+        let grammarState: vsctm.StackElement = null;
+        let pqState: Lexer.TLexer = null;
+        let lastTokenCount: number = 0;
+
+        let lines = QueryMultiline.split("\n");
+
+        for (let i = 0; i < lines.length; i++) {
+            let r = grammar.tokenizeLine(lines[i], grammarState);
+            grammarState = r.ruleStack;
+            
+            if (pqState == null) {
+                pqState = Lexer.from(lines[i]);                
+            } else {
+                pqState = Lexer.appendToDocument(pqState, lines[i]);
+            }
+
+            lastTokenCount = pqState.tokens.length;
+
+            pqState = Lexer.remaining(pqState);
+
+            let gTokens = TokenComparer.NormalizeGrammarTokens(r.tokens);
+            let comparer = new TokenComparer(gTokens, pqState.tokens.slice(lastTokenCount));
+
+            comparer.assertTokenCount();
+            // TODO: PQ offsets are based on document position rather than line position
+            // comparer.assertTokenOffsets();
+        }
+    })
 });
