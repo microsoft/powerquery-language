@@ -15,15 +15,18 @@ const grammar = registry.loadGrammarFromPathSync(getGrammarFilePath());
 const QuoteStringBeginScope = "punctuation.definition.string.begin.powerquery";
 const QuoteStringEndScope = "punctuation.definition.string.end.powerquery";
 const StringScope = "string.quoted.double.powerquery";
+const QuotedIdentifierBeginScope = "punctuation.definition.quotedidentifier.begin.powerquery";
+const QuotedIdentifierEndScope = "punctuation.definition.quotedidentifier.end.powerquery";
+const IdentifierScope = "entity.name.powerquery";
 
 class SingleLineTokenComparer {
     public grammarTokens: vsctm.IToken[];
-    public parserTokens: readonly Token[]
+    public parserTokens: readonly Token[];
 
     constructor(query: string, normalize: boolean = true) {
         let pqlex: Lexer.TLexer = Lexer.from(query);
-        pqlex = Lexer.remaining(pqlex);                
-        this.parserTokens = pqlex.tokens;        
+        pqlex = Lexer.remaining(pqlex);
+        this.parserTokens = pqlex.tokens;
 
         // remove whitespace tokens from grammar result
         let r = grammar.tokenizeLine(query, null);
@@ -43,17 +46,17 @@ class SingleLineTokenComparer {
             const pt = this.parserTokens[i];
             const gt = this.grammarTokens[i];
 
-            expect(pt.documentStartIndex).eq(gt.startIndex);
-            expect(pt.documentEndIndex).eq(gt.endIndex);
+            expect(pt.documentStartIndex).eq(gt.startIndex, "startIndex does not match");
+            expect(pt.documentEndIndex).eq(gt.endIndex, "endIndex does not match");
         }
     }
 
     public static NormalizeGrammarTokens(tokens: vsctm.IToken[]): vsctm.IToken[] {
         let result: vsctm.IToken[] = [];
-        
+
         for (let i = 0; i < tokens.length; i++) {
             const token = tokens[i];
-            
+
             // PQ doesn't return tokens for whitespace. 
             // Remove them from the grammar results.
             if (token.scopes.length == 1) {
@@ -63,20 +66,25 @@ class SingleLineTokenComparer {
             // PQ returns strings as a single token.
             // Grammar returns separate tokens for punctuation.
             // TODO: multiline string tokens?
-            if (token.scopes.includes(QuoteStringBeginScope)) {
+            if (token.scopes.includes(QuoteStringBeginScope) || token.scopes.includes(QuotedIdentifierBeginScope)) {
                 var startIndex = token.startIndex;
 
                 // next token should be string
-                var stringToken = tokens[++i];
-                var scopes = stringToken.scopes;
+                var middleToken = tokens[++i];
+                var scopes = middleToken.scopes;
 
                 // final token should be end quote
                 var endToken = tokens[++i];
                 var endIndex = endToken.endIndex;
 
                 // sanity
-                expect(scopes).contains(StringScope, "middle token should be a string");
-                expect(endToken.scopes).contains(QuoteStringEndScope, "third token should be end quote");
+                if (token.scopes.includes(QuoteStringBeginScope)) {
+                    expect(scopes).contains(StringScope, "middle token should be a string");
+                    expect(endToken.scopes).contains(QuoteStringEndScope, "third token should be end quote");
+                } else {
+                    expect(scopes).contains(IdentifierScope, "middle token should be an identifier");
+                    expect(endToken.scopes).contains(QuotedIdentifierEndScope, "third token should be end quote");
+                }
 
                 result.push({
                     startIndex: startIndex,
@@ -99,23 +107,23 @@ describe("Basic grammar tests", () => {
         expect(grammar).to.exist;
     }),
 
-    it("Tokens", () => {
-        const code = `let
+        it("Tokens", () => {
+            const code = `let
     a = 1,
     b = "text",
     c = Text.From(a)
 in
     c`;
 
-        let state = null;
-        let lines = code.split("\n");
+            let state = null;
+            let lines = code.split("\n");
 
-        for (let i = 0; i < lines.length; i++) {
-            let r = grammar.tokenizeLine(lines[i], state);            
-            state = r.ruleStack;
-            expect(r.tokens.length).to.be.greaterThan(0);
-        }
-    });
+            for (let i = 0; i < lines.length; i++) {
+                let r = grammar.tokenizeLine(lines[i], state);
+                state = r.ruleStack;
+                expect(r.tokens.length).to.be.greaterThan(0);
+            }
+        });
 });
 
 describe("Compare parser tokens", () => {
@@ -124,11 +132,43 @@ describe("Compare parser tokens", () => {
         const r = new SingleLineTokenComparer(query);
         r.assertTokenCount();
         r.assertTokenOffsets();
-    }),    
-    it("Text", () => {
-        const query = "\"string one\" & \"string 2\"";
-        const r = new SingleLineTokenComparer(query);
-        r.assertTokenCount();
-        r.assertTokenOffsets();        
-    })
+    }),
+        it("Text", () => {
+            const query = "\"string one\" & \"string 2\"";
+            const r = new SingleLineTokenComparer(query);
+            r.assertTokenCount();
+            r.assertTokenOffsets();
+        }),
+        it("Numbers", () => {
+            const query = "1 1.1 5e123 534.1223 2.2e555 -1.3";
+            const r = new SingleLineTokenComparer(query);
+            r.assertTokenCount();
+            r.assertTokenOffsets();
+        }),
+        it("Quoted identifier", () => {
+            const query = "#\"identifier with spaces\"";
+            const r = new SingleLineTokenComparer(query);
+            r.assertTokenCount();
+            r.assertTokenOffsets();
+        }),
+        // TODO: Grammar returns single token (good), but it ends at '.' (bad)
+        xit("Identifier", () => {
+            const query = "Table.FromRecords";
+            const r = new SingleLineTokenComparer(query);
+            r.assertTokenCount();
+            r.assertTokenOffsets();
+        }),
+        it("simple function", () => {
+            const query = "x = () => 1";
+            const r = new SingleLineTokenComparer(query);
+            r.assertTokenCount();
+            r.assertTokenOffsets();
+        }),
+        // TODO: duration is flagged as type, but starting # is ignored
+        xit("duration constructor", () => {
+            const query = "#duration(1,1,1,1)";
+            const r = new SingleLineTokenComparer(query);
+            r.assertTokenCount();
+            r.assertTokenOffsets();
+        })
 });
