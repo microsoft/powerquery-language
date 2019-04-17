@@ -178,7 +178,21 @@ describe("Compare parser tokens", () => {
         const r = new SingleLineTokenComparer(query);
         r.assertTokenCount();
         r.assertTokenOffsets();
-    })
+    });
+    // TODO: PQ parser doesn't handle comments in the same way
+    xit("line comment", () => {
+        const query = "1; // comment";
+        const r = new SingleLineTokenComparer(query);
+        r.assertTokenCount();
+        r.assertTokenOffsets();
+    });
+    // TODO: PQ parser doesn't handle comments in the same way
+    xit("block comment", () => {
+        const query = "1 + /* just a comment */ 1";
+        const r = new SingleLineTokenComparer(query);
+        r.assertTokenCount();
+        r.assertTokenOffsets();
+    });
 });
 
 describe("Incremental parsing", () => {
@@ -209,6 +223,19 @@ describe("Incremental parsing", () => {
             comparer.assertTokenCount();
             // TODO: PQ offsets are based on document position rather than line position
             // comparer.assertTokenOffsets();
+        }
+    });
+
+    // TODO: add PQ equivalent
+    xit("Multiline string literal", () => {
+        const query = "\"multi\nline\nstring\"";
+
+        let grammarState: vsctm.StackElement = null;
+        let lines = query.split("\n");
+
+        for (let i = 0; i < lines.length; i++) {
+            let r = grammar.tokenizeLine(lines[i], grammarState);
+            grammarState = r.ruleStack;
         }
     });
 });
