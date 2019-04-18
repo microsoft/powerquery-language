@@ -1,7 +1,7 @@
 import path = require('path');
 import vsctm = require('vscode-textmate');
-import { Lexer, Token } from 'powerquery-parser';
-import { expect, should } from "chai";
+import { Lexer, Token } from "powerquery-parser";
+import { expect } from "chai";
 import "mocha";
 
 function getGrammarFilePath(): string {

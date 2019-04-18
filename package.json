@@ -8,7 +8,7 @@
     "build": "npm run build:grammar && npm run build:tests",
     "build:grammar": "tsc -b build -v && node build/build.js",
     "build:tests": "tsc -b tests -v",
-    "test": "mocha --full-trace tests/test.js  --reporter mocha-multi-reporters"
+    "test": "mocha -r ts-node/register tests/**/*.ts"
   },
   "devDependencies": {
     "@types/chai": "latest",
@@ -21,6 +21,7 @@
     "mocha-multi-reporters": "latest",
     "plist": "latest",
     "powerquery-parser": "latest",
+    "ts-node": "^8.1.0",
     "typescript": "latest",
     "vscode-textmate": "^3.3.3"
   }
