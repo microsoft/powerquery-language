@@ -11,6 +11,7 @@
     "test": "mocha -r ts-node/register tests/**/*.ts"
   },
   "devDependencies": {
+    "@microsoft/powerquery-parser": "^0.1.1",
     "@types/chai": "latest",
     "@types/js-yaml": "latest",
     "@types/mocha": "latest",
@@ -18,10 +19,8 @@
     "chai": "latest",
     "js-yaml": "latest",
     "mocha": "latest",
-    "mocha-multi-reporters": "latest",
     "npx": "^10.2.0",
     "plist": "latest",
-    "powerquery-parser": "latest",
     "ts-node": "^8.1.0",
     "typescript": "latest",
     "vscode-textmate": "^3.3.3"
