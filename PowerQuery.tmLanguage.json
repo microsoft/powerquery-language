@@ -314,7 +314,7 @@
       "contentName": "meta.recordexpression.powerquery"
     },
     "Punctuation": {
-      "match": "(,)|(\\()|(\\))|({)|(})",
+      "match": "(,)|(\\()|(\\))|({)|(})|(;)",
       "captures": {
         "1": {
           "name": "punctuation.separator.powerquery"
@@ -330,6 +330,9 @@
         },
         "5": {
           "name": "punctuation.section.braces.end.powerquery"
+        },
+        "6": {
+          "name": "punctuation.semicolon.powerquery"
         }
       }
     },

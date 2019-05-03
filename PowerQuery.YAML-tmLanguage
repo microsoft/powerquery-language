@@ -180,7 +180,7 @@ repository:
       - include: $self
     contentName: meta.recordexpression.powerquery
   Punctuation:
-    match: '(,)|(\()|(\))|({)|(})'
+    match: '(,)|(\()|(\))|({)|(})|(;)'
     captures:
       '1':
         name: punctuation.separator.powerquery
@@ -192,6 +192,8 @@ repository:
         name: punctuation.section.braces.begin.powerquery
       '5':
         name: punctuation.section.braces.end.powerquery
+      '6':
+        name: punctuation.semicolon.powerquery
   ImplicitVariable:
     match: \b_\b
     name: keyword.operator.implicitvariable.powerquery

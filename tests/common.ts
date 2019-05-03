@@ -20,6 +20,7 @@ export class Scopes {
     public static QuotedIdentifierBegin = "punctuation.definition.quotedidentifier.begin.powerquery";
     public static QuotedIdentifierEnd = "punctuation.definition.quotedidentifier.end.powerquery";
     public static Identifier = "entity.name.powerquery";
+    public static BlockComment = "comment.block.powerquery";
 }
 
 export class TokenComparer {
@@ -65,19 +66,20 @@ export class TokenComparer {
                 continue;
             }
 
+            // TODO: multiline tokens?
+
             // PQ returns strings as a single token.
             // Grammar returns separate tokens for punctuation.
-            // TODO: multiline string tokens?
             if (token.scopes.includes(Scopes.QuoteStringBegin) || token.scopes.includes(Scopes.QuotedIdentifierBegin)) {
                 var startIndex = token.startIndex;
 
                 // next token should be string
-                var middleToken = tokens[++i];
-                var scopes = middleToken.scopes;
+                let middleToken = tokens[++i];
+                let scopes = middleToken.scopes;
 
                 // final token should be end quote
-                var endToken = tokens[++i];
-                var endIndex = endToken.endIndex;
+                let endToken = tokens[++i];
+                let endIndex = endToken.endIndex;
 
                 // sanity
                 if (token.scopes.includes(Scopes.QuoteStringBegin)) {
@@ -93,11 +95,24 @@ export class TokenComparer {
                     scopes: scopes,
                     endIndex: endIndex
                 });
+            } else if (token.scopes.includes(Scopes.BlockComment)) {
+                // Open and close block comment + comment content are separate tokens.
+                // Combine them to match parser representation.
+                let currentToken = token;
+                let endIndex: number = null;
+                while (currentToken.scopes.includes(Scopes.BlockComment) && (i + 1) < tokens.length) {
+                    endIndex = currentToken.endIndex;
+                    currentToken = tokens[++i];
+                }
 
-                continue;
+                result.push({
+                    startIndex: token.startIndex,
+                    scopes: token.scopes,
+                    endIndex: endIndex
+                });
+            } else {
+                result.push(token);
             }
-
-            result.push(token);
         }
 
         return result;

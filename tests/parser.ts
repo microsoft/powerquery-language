@@ -42,14 +42,12 @@ describe("Compare parser tokens", () => {
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
-    // TODO: PQ parser doesn't handle comments in the same way
-    xit("line comment", () => {
+    it("line comment", () => {
         const query = "1; // comment";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
-    // TODO: PQ parser doesn't handle comments in the same way
-    xit("block comment", () => {
+    it("block comment", () => {
         const query = "1 + /* just a comment */ 1";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();

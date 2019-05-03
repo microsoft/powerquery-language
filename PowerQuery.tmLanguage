@@ -496,7 +496,7 @@
       <key>Punctuation</key>
       <dict>
         <key>match</key>
-        <string>(,)|(\()|(\))|({)|(})</string>
+        <string>(,)|(\()|(\))|({)|(})|(;)</string>
         <key>captures</key>
         <dict>
           <key>1</key>
@@ -523,6 +523,11 @@
           <dict>
             <key>name</key>
             <string>punctuation.section.braces.end.powerquery</string>
+          </dict>
+          <key>6</key>
+          <dict>
+            <key>name</key>
+            <string>punctuation.semicolon.powerquery</string>
           </dict>
         </dict>
       </dict>
