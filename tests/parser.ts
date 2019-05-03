@@ -1,5 +1,5 @@
 import vsctm = require('vscode-textmate');
-import { Lexer, Token } from "powerquery-parser";
+import { Lexer, Token } from "@microsoft/powerquery-parser";
 import { expect } from "chai";
 import "mocha";
 import * as Shared from "./common";

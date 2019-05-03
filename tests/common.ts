@@ -1,6 +1,6 @@
 import path = require('path');
 import vsctm = require('vscode-textmate');
-import { Lexer, Token } from "powerquery-parser";
+import { Lexer, Token, LineToken } from "@microsoft/powerquery-parser";
 import { expect } from "chai";
 import "mocha";
 
@@ -10,6 +10,7 @@ function getGrammarFilePath(): string {
 
 export const registry = new vsctm.Registry();
 export const grammar = registry.loadGrammarFromPathSync(getGrammarFilePath());
+export const LINE_TERMINATOR: string = "\n";
 
 // Grammar constants
 export class Scopes {
@@ -23,9 +24,9 @@ export class Scopes {
 
 export class TokenComparer {
     public readonly grammarTokens: vsctm.IToken[];
-    public readonly parserTokens: readonly Token[];
+    public readonly parserTokens: ReadonlyArray<LineToken>;
 
-    constructor(grammarTokens: vsctm.IToken[], parserTokens: readonly Token[]) {
+    constructor(grammarTokens: vsctm.IToken[], parserTokens: ReadonlyArray<LineToken>) {
         this.grammarTokens = grammarTokens;
         this.parserTokens = parserTokens;
 
@@ -47,8 +48,8 @@ export class TokenComparer {
             const pt = this.parserTokens[i];
             const gt = this.grammarTokens[i];
 
-            expect(pt.documentStartIndex).eq(gt.startIndex, "startIndex does not match");
-            expect(pt.documentEndIndex).eq(gt.endIndex, "endIndex does not match");
+            expect(pt.positionStart.columnNumber).eq(gt.startIndex, "startIndex does not match");
+            expect(pt.positionEnd.columnNumber).eq(gt.endIndex, "endIndex does not match");
         }
     }
 
@@ -105,13 +106,12 @@ export class TokenComparer {
 
 export class SingleLineTokenComparer extends TokenComparer {
     constructor(query: string, normalize: boolean = true) {
-        let pqlex: Lexer.TLexer = Lexer.from(query);
-        pqlex = Lexer.remaining(pqlex);
+        let pqlex: Lexer.State = Lexer.from(query, LINE_TERMINATOR);
 
         // remove whitespace tokens from grammar result
         let r = grammar.tokenizeLine(query, null);
         let grammarTokens = normalize ? TokenComparer.NormalizeGrammarTokens(r.tokens) : r.tokens;
 
-        super(grammarTokens, pqlex.tokens);
+        super(grammarTokens, pqlex.lines[0].tokens);
     }
 }
