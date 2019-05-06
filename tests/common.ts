@@ -37,20 +37,30 @@ export class TokenComparer {
 
     public assertSame() {
         this.assertTokenCount();
-        this.assertTokenOffsets();
+        this.assertTokens();
     }
 
     public assertTokenCount() {
         expect(this.parserTokens.length).equals(this.grammarTokens.length, "token counts are not equal");
     }
 
-    public assertTokenOffsets() {
+    public assertTokens() {
         for (let i = 0; i < this.parserTokens.length; i++) {
             const pt = this.parserTokens[i];
             const gt = this.grammarTokens[i];
 
             expect(pt.positionStart.columnNumber).eq(gt.startIndex, "startIndex does not match");
             expect(pt.positionEnd.columnNumber).eq(gt.endIndex, "endIndex does not match");
+            
+            let equivalentScope = LineTokenKindToScope(pt.kind);
+            let lastScope = gt.scopes[gt.scopes.length -1];
+            
+            if (equivalentScope.endsWith(".powerquery")) {
+                expect(lastScope).eq(equivalentScope, "expected scope did not match");
+            } else {
+                // support partial scope match
+                expect(lastScope.startsWith(equivalentScope), "unexpected scope prefix");
+            }
         }
     }
 
