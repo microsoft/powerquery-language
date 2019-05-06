@@ -21,6 +21,7 @@ export class Scopes {
     public static QuotedIdentifierEnd = "punctuation.definition.quotedidentifier.end.powerquery";
     public static Identifier = "entity.name.powerquery";
     public static BlockComment = "comment.block.powerquery";
+    public static Default = "source.powerquery";
 }
 
 export class TokenComparer {
@@ -49,9 +50,6 @@ export class TokenComparer {
             const pt = this.parserTokens[i];
             const gt = this.grammarTokens[i];
 
-            expect(pt.positionStart.columnNumber).eq(gt.startIndex, "startIndex does not match");
-            expect(pt.positionEnd.columnNumber).eq(gt.endIndex, "endIndex does not match");
-            
             let equivalentScope = LineTokenKindToScope(pt.kind);
             let lastScope = gt.scopes[gt.scopes.length -1];
             
@@ -61,6 +59,9 @@ export class TokenComparer {
                 // support partial scope match
                 expect(lastScope.startsWith(equivalentScope), "unexpected scope prefix");
             }
+
+            expect(pt.positionStart.columnNumber).eq(gt.startIndex, "startIndex for token '" + pt.data + "' does not match. Grammar token: '" + gt.scopes[1] + "'");
+            expect(pt.positionEnd.columnNumber).eq(gt.endIndex, "endIndex for token '" + pt.data + "' does not match. Grammar token: '" + gt.scopes[1] + "'");
         }
     }
 
@@ -81,7 +82,7 @@ export class TokenComparer {
 
             // PQ returns strings as a single token.
             // Grammar returns separate tokens for quotes.
-            if (token.scopes.includes(Scopes.QuoteStringBegin) || token.scopes.includes(Scopes.QuotedIdentifierBegin)) {
+            if (token.scopes.includes(Scopes.QuotedIdentifierBegin)) {
                 var startIndex = token.startIndex;
 
                 // next token should be string
@@ -106,6 +107,20 @@ export class TokenComparer {
                     scopes: scopes,
                     endIndex: endIndex
                 });
+            } else if (token.scopes.includes(Scopes.QuoteStringBegin)) {
+                let currentToken = token;
+                let endIndex: number = null;
+                while (!currentToken.scopes.includes(Scopes.QuoteStringEnd) && (i + 1) < tokens.length) {                    
+                    currentToken = tokens[++i];
+                    endIndex = currentToken.endIndex;
+                }
+
+                result.push({
+                    startIndex: token.startIndex,
+                    scopes: [Scopes.Default, Scopes.String],
+                    endIndex: endIndex
+                });
+
             } else if (token.scopes.includes(Scopes.BlockComment)) {
                 // Open and close block comment + comment content are separate tokens.
                 // Combine them to match parser representation.
@@ -150,7 +165,7 @@ export function LineTokenKindToScope(tokenKind: LineTokenKind): string {
         case LineTokenKind.Asterisk:
             return "keyword.operator.arithmetic.powerquery";
         case LineTokenKind.AtSign:
-            return "inclusiveidentifier.powerquery";
+            return "keyword.operator.inclusiveidentifier.powerquery";
         case LineTokenKind.Bang:
             return "keyword.operator.sectionaccess.powerquery";
         case LineTokenKind.Comma:
@@ -279,7 +294,6 @@ export function LineTokenKindToScope(tokenKind: LineTokenKind): string {
             return "punctuation.definition.string.end.powerquery";
         case LineTokenKind.StringLiteralStart:
             return "punctuation.definition.string.begin.powerquery";
-
     }
 
     throw "Unexpected LineTokenKind value";
