@@ -1,6 +1,6 @@
 import path = require('path');
 import vsctm = require('vscode-textmate');
-import { Lexer, Token, LineToken } from "@microsoft/powerquery-parser";
+import { Lexer, Token, LineToken, LineTokenKind } from "@microsoft/powerquery-parser";
 import { expect } from "chai";
 import "mocha";
 
@@ -67,9 +67,10 @@ export class TokenComparer {
             }
 
             // TODO: multiline tokens?
+            // TODO: PQ doesn't handle escape sequences
 
             // PQ returns strings as a single token.
-            // Grammar returns separate tokens for punctuation.
+            // Grammar returns separate tokens for quotes.
             if (token.scopes.includes(Scopes.QuoteStringBegin) || token.scopes.includes(Scopes.QuotedIdentifierBegin)) {
                 var startIndex = token.startIndex;
 
@@ -129,4 +130,147 @@ export class SingleLineTokenComparer extends TokenComparer {
 
         super(grammarTokens, pqlex.lines[0].tokens);
     }
+}
+
+// TODO: nullable and optional?
+export function LineTokenKindToScope(tokenKind: LineTokenKind): string {
+    switch (tokenKind) {
+        case LineTokenKind.Ampersand:
+            return "keyword.operator.combination.powerquery";
+        case LineTokenKind.Asterisk:
+            return "keyword.operator.arithmetic.powerquery";
+        case LineTokenKind.AtSign:
+            return "inclusiveidentifier.powerquery";
+        case LineTokenKind.Bang:
+            return "keyword.operator.sectionaccess.powerquery";
+        case LineTokenKind.Comma:
+            return "punctuation.separator.powerquery";
+        case LineTokenKind.Division:
+            return "keyword.operator.arithmetic.powerquery";
+        case LineTokenKind.Ellipsis:
+            return "keyword.operator.ellipsis.powerquery";
+        case LineTokenKind.Equal:
+            return "keyword.operator.assignment-or-comparison.powerquery";
+        case LineTokenKind.FatArrow:
+            return "keyword.operator.function.powerquery";
+        case LineTokenKind.GreaterThan:
+            return "keyword.operator.comparison.powerquery";
+        case LineTokenKind.GreaterThanEqualTo:
+            return "keyword.operator.comparison.powerquery";            
+        case LineTokenKind.HexLiteral:
+            return "constant.numeric.integer.hexadecimal.powerquery";   // TODO: add test
+        case LineTokenKind.Identifier:
+            return "entity.name.powerquery";
+        case LineTokenKind.KeywordAnd:
+            return "keyword.operator.word.logical.powerquery";
+        case LineTokenKind.KeywordAs:
+            return "keyword.other.powerquery";
+        case LineTokenKind.KeywordEach:
+            return "keyword.other.powerquery";
+        case LineTokenKind.KeywordElse:
+            return "keyword.control.conditional.powerquery";
+        case LineTokenKind.KeywordError:
+            return "keyword.other.powerquery";
+        case LineTokenKind.KeywordFalse:
+            return "constant.language.logical.powerquery";
+        // case LineTokenKind.KeywordHashBinary = "KeywordHashBinary",
+        // case LineTokenKind.KeywordHashDate = "KeywordHashDate",
+        // case LineTokenKind.KeywordHashDateTime = "KeywordHashDateTime",
+        // case LineTokenKind.KeywordHashDateTimeZone = "KeywordHashDateTimeZone",
+        // case LineTokenKind.KeywordHashDuration = "KeywordHashDuration",
+        case LineTokenKind.KeywordHashInfinity:            
+            return "constant.language.numeric.float.powerquery";
+        case LineTokenKind.KeywordHashNan:
+            return "constant.language.numeric.float.powerquery";
+        case LineTokenKind.KeywordHashSections:
+            return "constant.language.intrinsicvariable.powerquery";
+        case LineTokenKind.KeywordHashShared:
+            return "constant.language.intrinsicvariable.powerquery";
+        // case LineTokenKind.KeywordHashTable = "KeywordHashTable",
+        // case LineTokenKind.KeywordHashTime = "KeywordHashTime",
+        case LineTokenKind.KeywordIf:
+            return "keyword.control.conditional.powerquery";
+        case LineTokenKind.KeywordIn:
+            return "keyword.other.powerquery";
+        case LineTokenKind.KeywordIs:
+            return "keyword.other.powerquery";
+        case LineTokenKind.KeywordLet:
+            return "keyword.other.powerquery";
+        case LineTokenKind.KeywordMeta:
+            return "keyword.other.powerquery";
+        case LineTokenKind.KeywordNot:
+            return "keyword.operator.word.logical.powerquery";
+        case LineTokenKind.KeywordOr:
+            return "keyword.operator.word.logical.powerquery";
+        case LineTokenKind.KeywordOtherwise:
+            return "keyword.control.exception.powerquery";
+        case LineTokenKind.KeywordSection:
+            return "keyword.powerquery";
+        case LineTokenKind.KeywordShared:
+            return "keyword.powerquery";
+        case LineTokenKind.KeywordThen:
+            return "keyword.control.conditional.powerquery";
+        case LineTokenKind.KeywordTrue:
+            return "constant.language.logical.powerquery";
+        case LineTokenKind.KeywordTry:
+            return "keyword.control.exception.powerquery";
+        case LineTokenKind.KeywordType:
+            return "keyword.other.powerquery";
+        case LineTokenKind.LeftBrace:
+            return "punctuation.section.braces.begin.powerquery";
+        case LineTokenKind.LeftBracket:
+            return "punctuation.section.brackets.begin.powerquery";
+        case LineTokenKind.LeftParenthesis:
+            return "punctuation.section.parens.begin.powerquery";
+        case LineTokenKind.LessThan:
+            return "keyword.operator.comparison.powerquery";
+        case LineTokenKind.LessThanEqualTo:
+            return "keyword.operator.comparison.powerquery";
+        case LineTokenKind.Minus:
+            return "keyword.operator.arithmetic.powerquery";
+        case LineTokenKind.NotEqual:
+            return "keyword.operator.comparison.powerquery";
+        case LineTokenKind.NullLiteral:
+            return "constant.language.null.powerquery";
+        case LineTokenKind.NumericLiteral:
+            return "constant.numeric."; // partial
+        case LineTokenKind.Plus:
+            return "keyword.operator.arithmetic.powerquery";
+        case LineTokenKind.QuestionMark:
+            return "keyword.operator.optional.powerquery";
+        case LineTokenKind.RightBrace:
+            return "punctuation.section.braces.end.powerquery";
+        case LineTokenKind.RightBracket:
+            return "punctuation.section.brackets.end.powerquery";
+        case LineTokenKind.RightParenthesis:
+            return "punctuation.section.parens.end.powerquery";
+        case LineTokenKind.Semicolon:
+            return "punctuation.semicolon.powerquery";        
+        // Comments
+        case LineTokenKind.LineComment:
+            return "comment.line.double-slash.powerquery";
+        case LineTokenKind.MultilineComment:
+        case LineTokenKind.MultilineCommentContent:
+        case LineTokenKind.MultilineCommentEnd:
+        case LineTokenKind.MultilineCommentStart:
+            return "comment.block.powerquery";
+        // Quoted identifiers
+        case LineTokenKind.QuotedIdentifierContent:
+            return "entity.name.powerquery";
+        case LineTokenKind.QuotedIdentifierEnd:
+            return "punctuation.definition.quotedidentifier.end.powerquery";
+        case LineTokenKind.QuotedIdentifierStart:
+            return "punctuation.definition.quotedidentifier.begin.powerquery";
+        // Strings
+        case LineTokenKind.StringLiteral:
+        case LineTokenKind.StringLiteralContent:
+            return "string.quoted.double.powerquery";
+        case LineTokenKind.StringLiteralEnd:
+            return "punctuation.definition.string.end.powerquery";
+        case LineTokenKind.StringLiteralStart:
+            return "punctuation.definition.string.begin.powerquery";
+
+    }
+
+    throw "Unexpected LineTokenKind value";
 }
