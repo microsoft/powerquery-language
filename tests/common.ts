@@ -145,7 +145,13 @@ export class TokenComparer {
     }
 }
 
-export class SingleLineTokenComparer extends TokenComparer {
+export function Compare(expression: string) {
+    const query = "\"string one\" & \"string 2\"";
+    const r = new SingleLineTokenComparer(query);
+    r.assertSame();
+}
+
+class SingleLineTokenComparer extends TokenComparer {
     constructor(query: string, normalize: boolean = true) {
         let pqlex: Lexer.State = Lexer.from(query, LINE_TERMINATOR);
 
@@ -158,7 +164,7 @@ export class SingleLineTokenComparer extends TokenComparer {
 }
 
 // TODO: nullable and optional?
-export function LineTokenKindToScope(tokenKind: LineTokenKind): string {
+function LineTokenKindToScope(tokenKind: LineTokenKind): string {
     switch (tokenKind) {
         case LineTokenKind.Ampersand:
             return "keyword.operator.combination.powerquery";
