@@ -198,11 +198,6 @@ export function LineTokenKindToScope(tokenKind: LineTokenKind): string {
             return "keyword.other.powerquery";
         case LineTokenKind.KeywordFalse:
             return "constant.language.logical.powerquery";
-        // case LineTokenKind.KeywordHashBinary = "KeywordHashBinary",
-        // case LineTokenKind.KeywordHashDate = "KeywordHashDate",
-        // case LineTokenKind.KeywordHashDateTime = "KeywordHashDateTime",
-        // case LineTokenKind.KeywordHashDateTimeZone = "KeywordHashDateTimeZone",
-        // case LineTokenKind.KeywordHashDuration = "KeywordHashDuration",
         case LineTokenKind.KeywordHashInfinity:            
             return "constant.language.numeric.float.powerquery";
         case LineTokenKind.KeywordHashNan:
@@ -211,8 +206,6 @@ export function LineTokenKindToScope(tokenKind: LineTokenKind): string {
             return "constant.language.intrinsicvariable.powerquery";
         case LineTokenKind.KeywordHashShared:
             return "constant.language.intrinsicvariable.powerquery";
-        // case LineTokenKind.KeywordHashTable = "KeywordHashTable",
-        // case LineTokenKind.KeywordHashTime = "KeywordHashTime",
         case LineTokenKind.KeywordIf:
             return "keyword.control.conditional.powerquery";
         case LineTokenKind.KeywordIn:
@@ -294,6 +287,15 @@ export function LineTokenKindToScope(tokenKind: LineTokenKind): string {
             return "punctuation.definition.string.end.powerquery";
         case LineTokenKind.StringLiteralStart:
             return "punctuation.definition.string.begin.powerquery";
+        // Constructor helpers
+        case LineTokenKind.KeywordHashBinary:
+        case LineTokenKind.KeywordHashDate:
+        case LineTokenKind.KeywordHashDateTime:
+        case LineTokenKind.KeywordHashDateTimeZone:
+        case LineTokenKind.KeywordHashDuration:
+        case LineTokenKind.KeywordHashTable:
+        case LineTokenKind.KeywordHashTime:
+            return "support.function.constructor.powerquery";
     }
 
     throw "Unexpected LineTokenKind value";

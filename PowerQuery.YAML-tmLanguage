@@ -13,6 +13,7 @@ patterns:
 - include: '#IntrinsicVariable'
 - include: '#Operators'
 - include: '#DotOperators'
+- include: '#TypeConstructor'
 - include: '#TypeName'
 - include: '#RecordExpression'
 - include: '#Punctuation'
@@ -40,6 +41,9 @@ repository:
         name: storage.modifier.powerquery
       '2':
         name: storage.type.powerquery
+  TypeConstructor:
+    match: (#binary|#date|#datetime|#datetimezone|#duration|#table|#time)\b
+    name: support.function.constructor.powerquery
   LiteralExpression:
     patterns:
       - include: '#String'

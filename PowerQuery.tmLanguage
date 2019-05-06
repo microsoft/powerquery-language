@@ -45,6 +45,10 @@
       </dict>
       <dict>
         <key>include</key>
+        <string>#TypeConstructor</string>
+      </dict>
+      <dict>
+        <key>include</key>
         <string>#TypeName</string>
       </dict>
       <dict>
@@ -116,6 +120,13 @@
             <string>storage.type.powerquery</string>
           </dict>
         </dict>
+      </dict>
+      <key>TypeConstructor</key>
+      <dict>
+        <key>match</key>
+        <string>(#binary|#date|#datetime|#datetimezone|#duration|#table|#time)\b</string>
+        <key>name</key>
+        <string>support.function.constructor.powerquery</string>
       </dict>
       <key>LiteralExpression</key>
       <dict>

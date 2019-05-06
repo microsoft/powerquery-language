@@ -1,6 +1,4 @@
 import vsctm = require('vscode-textmate');
-import { Lexer, Token } from "@microsoft/powerquery-parser";
-import { expect } from "chai";
 import "mocha";
 import * as Shared from "./common";
 
@@ -51,8 +49,7 @@ describe("Compare parser tokens", () => {
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
-    // TODO: duration is flagged as type, but starting # is ignored
-    xit("Duration constructor", () => {
+    it("Duration constructor", () => {
         const query = "#duration(1,1,1,1)";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
