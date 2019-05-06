@@ -15,13 +15,28 @@ describe("Compare parser tokens", () => {
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
+    it("With escaped text", () => {
+        const query = "\"with  \"\"escaped \"\" 'text\"";
+        const r = new Shared.SingleLineTokenComparer(query);
+        r.assertSame();
+    });
     it("Numbers", () => {
         const query = "1 1.1 5e123 534.1223 2.2e555 -1.3";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
+    it("Numeric expression", () => {
+        const query = "5 / 1.2e+2 + 0x1234abc";
+        const r = new Shared.SingleLineTokenComparer(query);
+        r.assertSame();
+    });
     it("Quoted identifier", () => {
         const query = "#\"identifier with spaces\"";
+        const r = new Shared.SingleLineTokenComparer(query);
+        r.assertSame();
+    });
+    it("Quoted identifier (no space)", () => {
+        const query = "#\"identifier\"";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
@@ -31,25 +46,50 @@ describe("Compare parser tokens", () => {
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
-    it("simple function", () => {
+    it("Simple function", () => {
         const query = "x = () => 1";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
     // TODO: duration is flagged as type, but starting # is ignored
-    xit("duration constructor", () => {
+    xit("Duration constructor", () => {
         const query = "#duration(1,1,1,1)";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
-    it("line comment", () => {
+    it("Line comment", () => {
         const query = "1; // comment";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
-    it("block comment", () => {
+    it("Block comment", () => {
         const query = "1 + /* just a comment */ 1";
         const r = new Shared.SingleLineTokenComparer(query);
         r.assertSame();
     });
+    it("Exception flow", () => {
+        const query = "try true otherwise error \"error text\"";
+        const r = new Shared.SingleLineTokenComparer(query);
+        r.assertSame();
+    });
+    it("Escaped identifier and step", () => {
+        const query = "#\"A  B\" = 1+2,";
+        const r = new Shared.SingleLineTokenComparer(query);
+        r.assertSame();
+    });
+    xit("Case sensitivity for keywords", () => {
+        const query = "And as Each each _";
+        const r = new Shared.SingleLineTokenComparer(query);
+        r.assertSame();
+    });
+    xit("Section header", () => {
+        const query = "[Version=\"1.0.1\"] section Foo; shared Member.Name = 1;";
+        const r = new Shared.SingleLineTokenComparer(query);
+        r.assertSame();
+    });
+    xit("Recursion", () => {
+        const query = "@RecursiveFunction()+@Rec.Func()";
+        const r = new Shared.SingleLineTokenComparer(query);
+        r.assertSame();
+    });    
 });
