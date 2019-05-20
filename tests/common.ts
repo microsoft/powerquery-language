@@ -1,6 +1,6 @@
 import path = require('path');
 import vsctm = require('vscode-textmate');
-import { Lexer, Token, LineToken, LineTokenKind } from "@microsoft/powerquery-parser";
+import { Lexer, LineToken, LineTokenKind } from "@microsoft/powerquery-parser";
 import { expect } from "chai";
 import "mocha";
 
@@ -10,7 +10,6 @@ function getGrammarFilePath(): string {
 
 export const registry = new vsctm.Registry();
 export const grammar = registry.loadGrammarFromPathSync(getGrammarFilePath());
-export const LINE_TERMINATOR: string = "\n";
 
 // Grammar constants
 export class Scopes {
@@ -145,13 +144,7 @@ export class TokenComparer {
     }
 }
 
-export function Compare(expression: string) {
-    const query = "\"string one\" & \"string 2\"";
-    const r = new SingleLineTokenComparer(query);
-    r.assertSame();
-}
-
-class SingleLineTokenComparer extends TokenComparer {
+export class SingleLineTokenComparer extends TokenComparer {
     constructor(query: string, normalize: boolean = true) {
         let pqlex: Lexer.State = Lexer.stateFrom(query);
 
