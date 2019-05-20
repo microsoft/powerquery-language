@@ -22,8 +22,11 @@ describe("Compare parser tokens", () => {
     it("Escaped identifier and step", () => compare('#"A  B" = 1+2,'));
     it("Case sensitivity for keywords", () => compare("And as Each each A"));
     it("Section header", () => compare('[Version="1.0.1"] section Foo; shared Member = 1;'));
+    it("Special character identifiers", () => compare('let ö = 1 in ö'));
     // TODO: Grammar returns single token (good), but it ends at '.' (bad)
     xit("Identifier", () => compare("Table.FromRecords"));
     xit("Recursion", () => compare("@RecursiveFunction()+@Rec.Func()"));
     xit("Default row identifier", () => compare("each _"));
+    xit("Function invoke", () => compare('Text.ToBinary("123", BinaryEncoding.Base64)'));
+    xit("Table type", () => compare('type table [a = type text, b = type number]'));
 });
