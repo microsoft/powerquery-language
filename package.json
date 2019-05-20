@@ -5,10 +5,9 @@
   "description": "TextMate grammar files for Power Query / M language",
   "main": "build/build.js",
   "scripts": {
-    "build": "npm run build:grammar && npm run build:tests",
+    "build": "npm run build:grammar",
     "build:grammar": "tsc -b build -v && node build/build.js && .\\node_modules\\.bin\\npx js-yaml PowerQuery.YAML-tmLanguage > PowerQuery.tmLanguage.json",
-    "build:tests": "tsc -b tests -v",
-    "test": "mocha -r ts-node/register tests/**/*.ts"
+    "test": "mocha -r ts-node/register tests/*.ts"
   },
   "devDependencies": {
     "@microsoft/powerquery-parser": "^0.1.7",
