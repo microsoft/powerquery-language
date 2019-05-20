@@ -53,10 +53,10 @@ export class TokenComparer {
             let lastScope = gt.scopes[gt.scopes.length - 1];
 
             if (equivalentScope.endsWith(".powerquery")) {
-                expect(lastScope).eq(equivalentScope, "expected scope did not match");
+                expect(lastScope).eq(equivalentScope, "expected scope did not match: " + TokenComparer.dumpTokens(pt, gt));
             } else {
                 // support partial scope match
-                expect(lastScope.startsWith(equivalentScope), "unexpected scope prefix");
+                expect(lastScope.startsWith(equivalentScope), "unexpected scope prefix: " + TokenComparer.dumpTokens(pt, gt));
             }
 
             expect(pt.positionStart).eq(gt.startIndex, "startIndex for token '" + pt.data + "' does not match. Grammar token: '" + gt.scopes[1] + "'");
@@ -141,6 +141,15 @@ export class TokenComparer {
         }
 
         return result;
+    }
+
+    private static dumpTokens(lineToken: LineToken, grammarToken: vsctm.IToken) {
+        const formatting = {
+            Parser: lineToken,
+            Grammar: grammarToken
+        }
+
+        return JSON.stringify(formatting);
     }
 }
 
