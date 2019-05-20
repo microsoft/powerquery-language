@@ -51,8 +51,8 @@ export class TokenComparer {
             const gt = this.grammarTokens[i];
 
             let equivalentScope = LineTokenKindToScope(pt.kind);
-            let lastScope = gt.scopes[gt.scopes.length -1];
-            
+            let lastScope = gt.scopes[gt.scopes.length - 1];
+
             if (equivalentScope.endsWith(".powerquery")) {
                 expect(lastScope).eq(equivalentScope, "expected scope did not match");
             } else {
@@ -60,8 +60,8 @@ export class TokenComparer {
                 expect(lastScope.startsWith(equivalentScope), "unexpected scope prefix");
             }
 
-            expect(pt.positionStart.columnNumber).eq(gt.startIndex, "startIndex for token '" + pt.data + "' does not match. Grammar token: '" + gt.scopes[1] + "'");
-            expect(pt.positionEnd.columnNumber).eq(gt.endIndex, "endIndex for token '" + pt.data + "' does not match. Grammar token: '" + gt.scopes[1] + "'");
+            expect(pt.positionStart).eq(gt.startIndex, "startIndex for token '" + pt.data + "' does not match. Grammar token: '" + gt.scopes[1] + "'");
+            expect(pt.positionEnd).eq(gt.endIndex, "endIndex for token '" + pt.data + "' does not match. Grammar token: '" + gt.scopes[1] + "'");
         }
     }
 
@@ -110,7 +110,7 @@ export class TokenComparer {
             } else if (token.scopes.includes(Scopes.QuoteStringBegin)) {
                 let currentToken = token;
                 let endIndex: number = null;
-                while (!currentToken.scopes.includes(Scopes.QuoteStringEnd) && (i + 1) < tokens.length) {                    
+                while (!currentToken.scopes.includes(Scopes.QuoteStringEnd) && (i + 1) < tokens.length) {
                     currentToken = tokens[++i];
                     endIndex = currentToken.endIndex;
                 }
@@ -153,7 +153,7 @@ export function Compare(expression: string) {
 
 class SingleLineTokenComparer extends TokenComparer {
     constructor(query: string, normalize: boolean = true) {
-        let pqlex: Lexer.State = Lexer.from(query, LINE_TERMINATOR);
+        let pqlex: Lexer.State = Lexer.stateFrom(query);
 
         // remove whitespace tokens from grammar result
         let r = grammar.tokenizeLine(query, null);
@@ -187,7 +187,7 @@ function LineTokenKindToScope(tokenKind: LineTokenKind): string {
         case LineTokenKind.GreaterThan:
             return "keyword.operator.comparison.powerquery";
         case LineTokenKind.GreaterThanEqualTo:
-            return "keyword.operator.comparison.powerquery";            
+            return "keyword.operator.comparison.powerquery";
         case LineTokenKind.HexLiteral:
             return "constant.numeric.integer.hexadecimal.powerquery";   // TODO: add test
         case LineTokenKind.Identifier:
@@ -204,7 +204,7 @@ function LineTokenKindToScope(tokenKind: LineTokenKind): string {
             return "keyword.other.powerquery";
         case LineTokenKind.KeywordFalse:
             return "constant.language.logical.powerquery";
-        case LineTokenKind.KeywordHashInfinity:            
+        case LineTokenKind.KeywordHashInfinity:
             return "constant.language.numeric.float.powerquery";
         case LineTokenKind.KeywordHashNan:
             return "constant.language.numeric.float.powerquery";
@@ -269,7 +269,7 @@ function LineTokenKindToScope(tokenKind: LineTokenKind): string {
         case LineTokenKind.RightParenthesis:
             return "punctuation.section.parens.end.powerquery";
         case LineTokenKind.Semicolon:
-            return "punctuation.semicolon.powerquery";        
+            return "punctuation.semicolon.powerquery";
         // Comments
         case LineTokenKind.LineComment:
             return "comment.line.double-slash.powerquery";

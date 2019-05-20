@@ -11,18 +11,18 @@
     "test": "mocha -r ts-node/register tests/**/*.ts"
   },
   "devDependencies": {
-    "@microsoft/powerquery-parser": "^0.1.1",
-    "@types/chai": "latest",
-    "@types/js-yaml": "latest",
-    "@types/mocha": "latest",
-    "@types/plist": "latest",
-    "chai": "latest",
-    "js-yaml": "latest",
-    "mocha": "latest",
+    "@microsoft/powerquery-parser": "^0.1.7",
+    "@types/chai": "^4.1.7",
+    "@types/js-yaml": "^3.12.1",
+    "@types/mocha": "^5.2.6",
+    "@types/plist": "^3.0.2",
+    "chai": "^4.2.0",
+    "js-yaml": "^3.13.1",
+    "mocha": "^6.1.4",
     "npx": "^10.2.0",
-    "plist": "latest",
+    "plist": "^3.0.1",
     "ts-node": "^8.1.0",
-    "typescript": "latest",
+    "typescript": "^3.4.5",
     "vscode-textmate": "^3.3.3"
   }
 }
