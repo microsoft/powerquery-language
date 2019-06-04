@@ -141,7 +141,7 @@ repository:
       '0':
         name: inclusiveidentifier.powerquery
   Identifier:
-    match: '[^;:=&<>\()\*\+\-/!\~\`\%\|\?\[\]\\,''\s]+'
+    match: '[^;:=&<>\()\*\+\-/!\~\`\%\|\?\[\]\\,''"\^\s]+'
     captures:
       '0':
         name: entity.name.powerquery

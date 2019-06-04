@@ -396,7 +396,7 @@
       <key>Identifier</key>
       <dict>
         <key>match</key>
-        <string>[^;:=&amp;&lt;&gt;\()\*\+\-/!\~\`\%\|\?\[\]\\,'\s]+</string>
+        <string>[^;:=&amp;&lt;&gt;\()\*\+\-/!\~\`\%\|\?\[\]\\,'"\^\s]+</string>
         <key>captures</key>
         <dict>
           <key>0</key>

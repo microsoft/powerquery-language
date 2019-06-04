@@ -41,7 +41,7 @@ export class TokenComparer {
     }
 
     public assertTokenCount() {
-        expect(this.parserTokens.length).equals(this.grammarTokens.length, "token counts are not equal");
+        expect(this.parserTokens.length).equals(this.grammarTokens.length, "token counts are not equal. Details:" + this.dumpAllTokens());
     }
 
     public assertTokens() {
@@ -141,9 +141,20 @@ export class TokenComparer {
         }
 
         return result;
+
     }
 
-    private static dumpTokens(lineToken: LineToken, grammarToken: vsctm.IToken) {
+    // TODO: improve formatting to make this more readable and easier to identify differences
+    private dumpAllTokens(): string {
+        const formatting = {
+            Parser: this.parserTokens,
+            Grammar: this.grammarTokens
+        }
+
+        return JSON.stringify(formatting);
+    }
+
+    private static dumpTokens(lineToken: LineToken, grammarToken: vsctm.IToken): string {
         const formatting = {
             Parser: lineToken,
             Grammar: grammarToken
