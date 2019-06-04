@@ -21,8 +21,9 @@ describe("Compare parser tokens", () => {
     it("Exception flow", () => compare('try true otherwise error "error text"'));
     it("Escaped identifier and step", () => compare('#"A  B" = 1+2,'));
     it("Case sensitivity for keywords", () => compare("And as Each each A"));
-    it("Section header", () => compare('[Version="1.0.1"] section Foo; shared Member = 1;'));
-    it("Special character identifiers", () => compare('let ö = 1 in ö'));
+    it("Section header", () => compare('[version="1.0.1"] section Foo; shared Member = 1;'));
+    it("Special character identifiers (single)", () => compare('let ö = 1 in ö'));
+    it("Special character identifiers (mixed)", () => compare('let övar1ἓἓ = 1 in övar1ἓἓ'));
     // TODO: Grammar returns single token (good), but it ends at '.' (bad)
     xit("Identifier", () => compare("Table.FromRecords"));
     xit("Recursion", () => compare("@RecursiveFunction()+@Rec.Func()"));
