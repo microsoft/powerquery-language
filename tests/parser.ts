@@ -25,6 +25,7 @@ describe("Compare parser tokens", () => {
     it("Special character identifiers (single)", () => compare('let ö = 1 in ö'));
     it("Special character identifiers (mixed)", () => compare('let övar1ἓἓ = 1 in övar1ἓἓ'));
     it("Identifier with dot", () => compare("Table.FromRecords"));
+    // original regex we want to check - '[^\`\~\!\@\%\^\&\*\(\)\-\=\+\[\{\]\}\\\|;:\'\"\,\<\>\/\?\s]+'
     it("Non-identifier characters as valid separators", () => {
         const separators = ['&', '<>', '<', '>', '*', '+', '/', '-', '=', '>=', '<=', ','];
         separators.forEach(c => {
