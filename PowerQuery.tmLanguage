@@ -396,15 +396,10 @@
       <key>Identifier</key>
       <dict>
         <key>match</key>
-        <string>(?x:(?&lt;![\._\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}])(@?)([_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}][_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}]*(?:\.[_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}][_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}])*)\b)</string>
+        <string>[^;:=&amp;&lt;&gt;\()\*\+\-/!\~\`\%\|\?\[\]\\,'\s]+</string>
         <key>captures</key>
         <dict>
-          <key>1</key>
-          <dict>
-            <key>name</key>
-            <string>keyword.operator.inclusiveidentifier.powerquery</string>
-          </dict>
-          <key>2</key>
+          <key>0</key>
           <dict>
             <key>name</key>
             <string>entity.name.powerquery</string>
@@ -414,7 +409,7 @@
       <key>Operators</key>
       <dict>
         <key>match</key>
-        <string>(=&gt;)|(=)|(&lt;&gt;|&lt;|&gt;|&lt;=|&gt;=)|(&amp;)|(\+|-|\*|\/)|(!)|(\?)</string>
+        <string>(=&gt;)|(&lt;&gt;|&lt;=|&gt;=|&lt;|&gt;)|(=)|(&amp;)|(\+|-|\*|\/)|(!)|(\?)</string>
         <key>captures</key>
         <dict>
           <key>1</key>
@@ -425,12 +420,12 @@
           <key>2</key>
           <dict>
             <key>name</key>
-            <string>keyword.operator.assignment-or-comparison.powerquery</string>
+            <string>keyword.operator.comparison.powerquery</string>
           </dict>
           <key>3</key>
           <dict>
             <key>name</key>
-            <string>keyword.operator.comparison.powerquery</string>
+            <string>keyword.operator.assignment-or-comparison.powerquery</string>
           </dict>
           <key>4</key>
           <dict>

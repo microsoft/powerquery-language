@@ -24,8 +24,31 @@ describe("Compare parser tokens", () => {
     it("Section header", () => compare('[version="1.0.1"] section Foo; shared Member = 1;'));
     it("Special character identifiers (single)", () => compare('let ö = 1 in ö'));
     it("Special character identifiers (mixed)", () => compare('let övar1ἓἓ = 1 in övar1ἓἓ'));
-    // TODO: Grammar returns single token (good), but it ends at '.' (bad)
-    xit("Identifier", () => compare("Table.FromRecords"));
+    it("Identifier with dot", () => compare("Table.FromRecords"));
+    it("Non-identifier characters as valid separators", () => {
+        const separators = ['&', '<>', '<', '>', '*', '+', '/', '-', '=', '>=', '<=', ','];
+        separators.forEach(c => {
+            compare("ident1" + c + "ident2");
+        });
+    });
+    it("Non-identifier characters", () => {
+        const separators = ['!', '~', '`', '%', ';', ':', '(a)', '|', '?', '\\', "'"];
+        separators.forEach(c => {
+            compare("ident1" + c);
+        });
+    });
+    //
+    // Failing tests
+    //
+
+    // token is reported as storage.type rather than identifier
+    // not sure what the correct behavior is
+    xit("Record field", () => compare("record[field]"));
+    xit("List access", () => compare("list{0}"));
+    
+    //
+    // Needs investigation
+    //
     xit("Recursion", () => compare("@RecursiveFunction()+@Rec.Func()"));
     xit("Default row identifier", () => compare("each _"));
     xit("Function invoke", () => compare('Text.ToBinary("123", BinaryEncoding.Base64)'));

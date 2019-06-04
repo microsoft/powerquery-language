@@ -253,27 +253,24 @@
       }
     },
     "Identifier": {
-      "match": "(?x:(?<![\\._\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}])(@?)([_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}][_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}]*(?:\\.[_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}][_\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}\\p{Nd}\\p{Pc}\\p{Mn}\\p{Mc}\\p{Cf}])*)\\b)",
+      "match": "[^;:=&<>\\()\\*\\+\\-/!\\~\\`\\%\\|\\?\\[\\]\\\\,'\\s]+",
       "captures": {
-        "1": {
-          "name": "keyword.operator.inclusiveidentifier.powerquery"
-        },
-        "2": {
+        "0": {
           "name": "entity.name.powerquery"
         }
       }
     },
     "Operators": {
-      "match": "(=>)|(=)|(<>|<|>|<=|>=)|(&)|(\\+|-|\\*|\\/)|(!)|(\\?)",
+      "match": "(=>)|(<>|<=|>=|<|>)|(=)|(&)|(\\+|-|\\*|\\/)|(!)|(\\?)",
       "captures": {
         "1": {
           "name": "keyword.operator.function.powerquery"
         },
         "2": {
-          "name": "keyword.operator.assignment-or-comparison.powerquery"
+          "name": "keyword.operator.comparison.powerquery"
         },
         "3": {
-          "name": "keyword.operator.comparison.powerquery"
+          "name": "keyword.operator.assignment-or-comparison.powerquery"
         },
         "4": {
           "name": "keyword.operator.combination.powerquery"
